@@ -18,9 +18,9 @@ public class HomeController {
 	public String home(Locale locale, Model model) {
 		logger.info("Welcome home! The client locale is {}.", locale);
 		
-		//return "home";
+		return "home";
 		//return "redirect:/user/userList";
-		return "redirect:/user2/user2List";
+		//return "redirect:/user2/user2List";
 	}
 	
 }

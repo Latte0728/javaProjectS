@@ -56,7 +56,7 @@
     	str += '<td><input type="text" name="address" class="form-control" /></td>';
     	str += '</tr>';
     	str += '<tr>';
-    	str += '<td colspan="2" class="text-center"><input type="submit" value="회원가입" class="btn btn-info"/></td>';
+    	str += '<td colspan="2" class="text-center"><input type="submit" value="회원가입" class="btn btn-info form-control"/></td>';
     	str += '</tr>';
     	str += '</table>';
     	str += '</form>';
@@ -79,18 +79,19 @@
   <h2>회 원 리 스 트2</h2>
   <br/>
   <div class="row">
-    <div class="col">
+    <div class="col-7">
       <input type="button" value="회원가입폼" onclick="fNewForm()" id="fNewFormBtn" class="btn btn-primary btn-sm mb-2"/>
       <input type="button" value="회원가입폼닫기" onclick="fNewFormClose()" id="fNewFormCloseBtn" class="btn btn-info btn-sm mb-2"/>
     </div>
-    <div class="col text-right">
-	    개별검색 : 
-	    <input type="text" name="name" value="${name}" id="name">
-	    <input type="button" value="검색" onclick="nameSearch()" class="btn btn-success btn-sm mb-2"/>
+    <div class="col-5">
+	    <div class="input-group">
+	      <input type="text" name="name" id="name" value="${name}" class="form-control mb-2">
+	      <div class="input-group-append"><input type="button" value="이름검색" onclick="nameSearch()" class="btn btn-success btn-sm mb-2"/></div>
+	    </div>
     </div>
   </div>
   <div id="demo"></div>
-  <table class="table table-hover">
+  <table class="table table-hover text-center">
     <tr class="table-dark text-dark">
       <th>번호</th>
       <th>아이디</th>
@@ -149,5 +150,6 @@
   </div>
 </div>
 <p><br/></p>
+<jsp:include page="/WEB-INF/views/include/footer.jsp" />
 </body>
 </html>
