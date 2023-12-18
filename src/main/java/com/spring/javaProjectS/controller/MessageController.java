@@ -72,8 +72,42 @@ public class MessageController {
 			model.addAttribute("msg", "방명록의 글 삭제 실패~~");
 			model.addAttribute("url", "guest/guestList");
 		}
-		
-		
+		else if(msgFlag.equals("mailSendOk")) {
+			model.addAttribute("msg", "메일이 성공적으로 전송되었습니다.");
+			model.addAttribute("url", "study/mail/mail");
+		}
+		else if(msgFlag.equals("memberLoginNo")) {
+			model.addAttribute("msg", "회원 로그인 실패~~");
+			model.addAttribute("url", "member/memberLogin");
+		}
+		else if(msgFlag.equals("memberLoginOk")) {
+			model.addAttribute("msg", mid + "님 로그인 되셨습니다.");
+			model.addAttribute("url", "member/memberMain");
+		}
+		else if(msgFlag.equals("memberLogout")) {
+			model.addAttribute("msg", mid + "님 로그아웃 되었습니다.");
+			model.addAttribute("url", "member/memberLogin");
+		}
+		else if(msgFlag.equals("memberJoinOk")) {
+			model.addAttribute("msg", "회원 가입 되었습니다.");
+			model.addAttribute("url", "member/memberLogin");
+		}
+		else if(msgFlag.equals("memberJoinNo")) {
+			model.addAttribute("msg", "회원 가입 실패~~");
+			model.addAttribute("url", "member/memberJoin");
+		}
+		else if(msgFlag.equals("idCheckNo")) {
+			model.addAttribute("msg", "아이디가 중복되었습니다.");
+			model.addAttribute("url", "member/memberJoin");
+		}
+		else if(msgFlag.equals("memberDeleteOk")) {
+			model.addAttribute("msg", "탈퇴가 완료되었습니다.");
+			model.addAttribute("url", "member/memberLogout");
+		}
+		else if(msgFlag.equals("memberDeleteNo")) {
+			model.addAttribute("msg", "예상치 못한 오류로 인하여 탈퇴 신청이 거부되었습니다.");
+			model.addAttribute("url", "member/memberMain");
+		}
 		return "include/message";
 	}
 }
