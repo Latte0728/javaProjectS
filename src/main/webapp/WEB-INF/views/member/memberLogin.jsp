@@ -87,14 +87,19 @@
     	}
     	
     	$.ajax({
-    		url  : "memberPasswordSearch.mem",
+    		url  : "${ctp}/member/memberPasswordSearch",
     		type : "post",
     		data : query,
     		success:function(res) {
-    			passwordShow.innerHTML = "결과메세지 : " + res;
+    			if(res == "1") {
+    				alert("새로운 비밀번호가 회원님 메일로 발송 되었습니다.")
+    			}	
+    			else {
+    				alert("예상치 못한 오류로 인하여 메일 발송이 취소되었습니다.")
+    			}	
     		},
     		error : function() {
-    			alert("전송오류!");
+    			alert("전송오류");
     		}
     	});
     }

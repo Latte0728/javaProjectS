@@ -100,14 +100,40 @@ public class MessageController {
 			model.addAttribute("msg", "아이디가 중복되었습니다.");
 			model.addAttribute("url", "member/memberJoin");
 		}
-		else if(msgFlag.equals("memberDeleteOk")) {
-			model.addAttribute("msg", "탈퇴가 완료되었습니다.");
-			model.addAttribute("url", "member/memberLogout");
+		else if(msgFlag.equals("nickCheckNo")) {
+			model.addAttribute("msg", "닉네임이 중복되었습니다.");
+			model.addAttribute("url", "member/memberUpdate");
 		}
-		else if(msgFlag.equals("memberDeleteNo")) {
-			model.addAttribute("msg", "예상치 못한 오류로 인하여 탈퇴 신청이 거부되었습니다.");
-			model.addAttribute("url", "member/memberMain");
+		else if(msgFlag.equals("memberUpdateOk")) {
+			model.addAttribute("msg", "회원정보가 수정되었습니다.");
+			model.addAttribute("url", "member/memberUpdate");
 		}
+		else if(msgFlag.equals("memberUpdateNo")) {
+			model.addAttribute("msg", "회원정보 수정실패~~");
+			model.addAttribute("url", "member/memberUpdate");
+		}
+		else if(msgFlag.equals("boardInputOk")) {
+			model.addAttribute("msg", "게시판에 글이 등록되었습니다.");
+			model.addAttribute("url", "board/boardList");
+		}
+		else if(msgFlag.equals("boardInputNo")) {
+			model.addAttribute("msg", "게시판에 글 등록실패~~");
+			model.addAttribute("url", "board/boardInput");
+		}
+		else if(msgFlag.equals("adminNo")) {
+			model.addAttribute("msg", "관리자만 접속하실수 있습니다.");
+			model.addAttribute("url", "/");
+		}
+		else if(msgFlag.equals("memberLevelNo")) {
+			model.addAttribute("msg", "해당등급으로는 접근하실수 없습니다.");
+			model.addAttribute("url", "/");
+		}
+		else if(msgFlag.equals("memberNo")) {
+			model.addAttribute("msg", "로그인후 사용하세요.");
+			model.addAttribute("url", "member/memberLogin");
+		}
+		
+		
 		return "include/message";
 	}
 }

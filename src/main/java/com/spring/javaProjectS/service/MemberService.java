@@ -10,13 +10,16 @@ public interface MemberService {
 
 	public int setMemberJoinOk(MemberVO vo);
 
-	public int setMemberDelete(String sMid);
+	public int setUserDel(String mid);
 
-	public MemberVO pwdChangeGet(String mid);
+	public int setPwdChangeOk(String mid, String pwd);
 
-	public int setPasswordUpdate(String pwd, String mid);
+	public int setMemberUpdateOk(MemberVO vo);
 
+	public void setMemberPasswordUpdate(String mid, String pwd);
 
+	public MemberVO getmemberOk(String mid);
 
+	
 
 }

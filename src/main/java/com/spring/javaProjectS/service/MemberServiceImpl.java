@@ -27,27 +27,40 @@ public class MemberServiceImpl implements MemberService {
 		// 사진처리...
 		vo.setPhoto("noimage.jpg");
 		
-		
 		return memberDAO.setMemberJoinOk(vo);
 	}
 
 	@Override
-	public int setMemberDelete(String sMid) {
-		
-		return memberDAO.setMemberDelete(sMid);
+	public int setUserDel(String mid) {
+		return memberDAO.setUserDel(mid);
 	}
 
 	@Override
-	public MemberVO pwdChangeGet(String mid) {
-		
-		return memberDAO.pwdChangeGet(mid);
+	public int setPwdChangeOk(String mid, String pwd) {
+		return memberDAO.setPwdChangeOk(mid, pwd);
 	}
 
 	@Override
-	public int setPasswordUpdate(String pwd, String mid) {
-		
-		return memberDAO.setPasswordUpdate(pwd, mid);
+	public int setMemberUpdateOk(MemberVO vo) {
+		return memberDAO.setMemberUpdateOk(vo);
 	}
 
+	@Override
+	public void setMemberPasswordUpdate(String mid, String pwd) {
+		memberDAO.setMemberPasswordUpdate(mid, pwd);
+	}
+
+	@Override
+	public MemberVO getmemberOk(String mid) {
+		
+		return memberDAO.setMemberOk(mid);
+	}
+
+	
+	
+
+	
+
+	
 	
 }

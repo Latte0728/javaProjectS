@@ -164,6 +164,7 @@
     			if(res == "1") {
     				alert("이미 사용중인 아이디 입니다. 다시 아이디를 입력하세요.");
     				$("#mid").focus();
+    				// $("#mid"). 에서 $("#") 부분은 제이쿼리 부분
     			}
     			else {
     				alert("사용 가능한 아이디 입니다.");
@@ -223,6 +224,25 @@
     		document.getElementById("photoDemo").src = "";
     	}
     }
+    // 이메일 인증 
+    function eCheck() {
+        $.ajax({
+       		url   : "${ctp}/member/memberJoin",
+       		type  : "post",
+       		data 	: {mid:mid},
+       		success:function(res) {
+       			if(res == "1") {
+    				alert("이메일 인증이 완료되었습니다.");
+    				$("#mid").focus();
+    				// $("#mid"). 에서 $("#") 부분은 제이쿼리 부분
+    			}
+    			
+       		},
+       		error : function() {
+       			alert("예상치 못한 오류로 인한 이메일 인증 실패");
+       		}
+       	});
+    }
   </script>
 </head>
 <body>
@@ -251,7 +271,7 @@
       <input type="text" class="form-control" id="name" placeholder="성명을 입력하세요." name="name" required />
     </div>
     <div class="form-group">
-      <label for="email1">Email address:</label>
+      <label for="email1">Email address:  &nbsp; &nbsp;<input type="button" value="이메일 인증" id="eCheck" name="eCheck" class="btn btn-secondary btn-sm" onclick=""/></label>
         <div class="input-group mb-3">
           <input type="text" class="form-control" placeholder="Email을 입력하세요." id="email1" name="email1" required />
           <div class="input-group-append">

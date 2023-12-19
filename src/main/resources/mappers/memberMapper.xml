@@ -10,23 +10,29 @@
     select * from member2 where nickName = #{nickName};
   </select>  
   
-  <select id="pwdChangeGet" resultType="com.spring.javaProjectS.vo.MemberVO">
-    select pwd from member2 where mid = #{mid};
-  </select>
   
   
-  <!-- insert delete update는 처리 개수를 반환 -->
   <insert id="setMemberJoinOk">
     insert into member2 values (default,#{vo.mid},#{vo.pwd},#{vo.nickName},#{vo.name},#{vo.gender},#{vo.birthday},#{vo.tel},#{vo.address},#{vo.email},#{vo.homePage},#{vo.job},#{vo.hobby},#{vo.photo},#{vo.content},#{vo.userInfor},default,default,default,default,default,default,default);
   </insert>
   
   
   
-  <update id="setMemberDelete">
-  	update member2 set userDel='OK' where mid = #{sMid};
+  <update id="setPwdChangeOk">
+    update member2 set pwd = #{pwd} where mid = #{mid};
   </update>
   
-  <update id="setPasswordUpdate">
-  	update member2 set pwd= #{pwd} where mid=#{mid};
+  <update id="setMemberUpdateOk">
+    update member2 set nickName=#{vo.nickName},name=#{vo.name},gender=#{vo.gender},birthday=#{vo.birthday},tel=#{vo.tel},address=#{vo.address},email=#{vo.email},homePage=#{vo.homePage},job=#{vo.job},hobby=#{vo.hobby},photo=#{vo.photo},content=#{vo.content},userInfor=#{vo.userInfor} where mid=#{vo.mid};
   </update>
+  
+  <update id="setMemberPasswordUpdate">
+    update member2 set pwd = #{pwd} where mid = #{mid};
+  </update>
+  
+  
+  
+  <delete id="setUserDel">
+    update member2 set userDel = 'OK' where mid = #{mid};
+  </delete>
 </mapper>
