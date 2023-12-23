@@ -3,6 +3,7 @@ package com.spring.javaProjectS.dao;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.spring.javaProjectS.vo.UserVO;
 
@@ -21,5 +22,7 @@ public interface User2DAO {
 	public UserVO getUserSearchVO(@Param("mid") String mid);
 
 	public List<UserVO> getUser2SearchMid(@Param("mid") String mid);
+
+	public int fileUpload(@Param("fName") MultipartFile fName, @Param("mid") String mid);
 
 }

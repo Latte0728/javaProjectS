@@ -1,5 +1,9 @@
 package com.spring.javaProjectS.controller;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.security.InvalidKeyException;
 import java.util.ArrayList;
@@ -9,7 +13,9 @@ import java.util.UUID;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
@@ -17,9 +23,13 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.spring.javaProjectS.common.ARIAUtil;
 import com.spring.javaProjectS.common.SecurityUtil;
@@ -30,7 +40,7 @@ import com.spring.javaProjectS.vo.UserVO;
 @Controller
 @RequestMapping("/study")
 public class StudyController {
-	
+  
 	@Autowired
 	StudyService studyService;
 	
@@ -119,9 +129,7 @@ public class StudyController {
 	public List<UserVO> ajaxTest4_2Post(String mid) {
 		return studyService.getUser2SearchMid(mid);
 	}
-	
-	// 여기서부터는 암호화 방식입니다.
-	
+
 	@RequestMapping(value = "/uuid/uidForm", method = RequestMethod.GET)
 	public String uidFormGet() {
 		return "study/uuid/uidForm";
@@ -165,10 +173,7 @@ public class StudyController {
 		String salt = uid.toString().substring(0,8);
 		
 		String encPwd = "";
-		// encPwd : 암호화된 비밀 번호
-		
 		String decPwd = "";
-		// decPwd : 복호화된 비밀 번호
 		
 		encPwd = ARIAUtil.ariaEncrypt(pwd + salt);
 		decPwd = ARIAUtil.ariaDecrypt(encPwd);
@@ -178,12 +183,12 @@ public class StudyController {
 		return pwd;
 	}
 	
-	// bCryptPassword
 	@RequestMapping(value = "/password/bCryptPassword", method = RequestMethod.GET)
 	public String bCryptPasswordGet() {
 		return "study/password/bCryptPassword";
 	}
 	
+	// BcryptPasswordEncoder 암호화
 	@ResponseBody
 	@RequestMapping(value = "/password/bCryptPassword", method = RequestMethod.POST, produces="application/text; charset=utf8")
 	public String bCryptPasswordPost(String pwd) {
@@ -201,7 +206,7 @@ public class StudyController {
 		return "study/mail/mailForm";
 	}
 	
-	//메일 전송하기
+	// 메일 전송하기
 	@RequestMapping(value = "/mail/mail", method = RequestMethod.POST)
 	public String mailPost(MailVO vo, HttpServletRequest request) throws MessagingException {
 		String toMail = vo.getToMail();
@@ -210,42 +215,101 @@ public class StudyController {
 		
 		// 메일 전송을 위한 객체 : MimeMessage(), MimeMessageHelper()
 		MimeMessage message = mailSender.createMimeMessage();
-		MimeMessageHelper messageHelper = new MimeMessageHelper(message, true,  "UTF-8");
+		MimeMessageHelper messageHelper = new MimeMessageHelper(message, true, "UTF-8");
 		
-		// 메일 보관함에 회원이 보내온 메시지들의 정보를 모두 저장시킨 후 작업 처리 
+		// 메일보관함에 회원이 보내온 메세지들의 정보를 모두 저장시킨후 작업처리하자...
 		messageHelper.setTo(toMail);
-		// 넣어주는 건 set
 		messageHelper.setSubject(title);
 		messageHelper.setText(content);
 		
-		// 메시지 보관함의 내용(content)에, 발신자의 필요한 정보를 추가로 담아서 전송시켜주면 됨..
+		// 메세지 보관함의 내용(content)에, 발신자의 필요한 정보를 추가로 담아서 전송시켜주면 좋다....
 		content = content.replace("\n", "<br>");
 		content += "<br><hr><h3>JavaProjectS 보냅니다.</h3><hr><br>";
-		content += "<p><img src=\"cid:main.png\" width='500px'></p>";
+		content += "<p><img src=\"cid:main.jpg\" width='500px'></p>";
 		content += "<p>방문하기 : <a href='49.142.157.251:9090/cjgreen'>JavaProject</a></p>";
-		//content += '<p>방문하기 : <a href="49.142.157.251:9090/javaProjectS05">JavaProject</a></p>';
 		content += "<hr>";
 		messageHelper.setText(content, true);
 		
-		// 본문에 기재된 그림 파일의 경로와 파일명을 별로도 표시한다. 그리고 다시 보관함에 저장한다.
-		//FileSystemResource file = new FileSystemResource("D:\\JavaProject\\springframework\\works\\javaProjectS\\src\\main\\webapp\\resources\\images\\main.png");
+		// 본문에 기재된 그림파일의 경로와 파일명을 별로도 표시한다. 그런후 다시 보관함에 저장한다.
+		//FileSystemResource file = new FileSystemResource("D:\\JavaProject\\springframework\\works\\javaProjectS\\src\\main\\webapp\\resources\\images\\main.jpg");
 		//request.getSession().getServletContext().getRealPath("");
-		FileSystemResource file = new FileSystemResource(request.getSession().getServletContext().getRealPath("/resources/images/main.png"));
-		messageHelper.addInline("main.png", file);
+		FileSystemResource file = new FileSystemResource(request.getSession().getServletContext().getRealPath("/resources/images/main.jpg"));
+		messageHelper.addInline("main.jpg", file);
 		
-		
-		// 첨부 파일 보내기 
-		file = new FileSystemResource(request.getSession().getServletContext().getRealPath("/resources/images/paris.jpg"));
-		messageHelper.addAttachment("paris.jpg", file);
+		// 첨부파일 보내기
+		file = new FileSystemResource(request.getSession().getServletContext().getRealPath("/resources/images/chicago.jpg"));
+		messageHelper.addAttachment("chicago.jpg", file);
 		
 		file = new FileSystemResource(request.getSession().getServletContext().getRealPath("/resources/images/main.zip"));
 		messageHelper.addAttachment("main.zip", file);
-		// 메일 전송하기 
+		
+		
+		// 메일 전송하기
 		mailSender.send(message);
 		
-		//return "study/mail/mailForm";
 		return "redirect:/message/mailSendOk";
 	}
-
+	
+	@RequestMapping(value = "/fileUpload/fileUpload", method = RequestMethod.GET)
+	public String fileUploadGet(HttpServletRequest request, Model model) {
+		String realPath = request.getSession().getServletContext().getRealPath("/resources/data/study");
+		// /resources/data/study/ 의 경우 study 밑에 있는 file을 가리킬 준비를 함
+		String[] files = new File(realPath).list();
 		
+		model.addAttribute("files", files);
+		model.addAttribute("fileCount", files.length);
+		
+		return "study/fileUpload/fileUpload";
+	}
+	
+	@RequestMapping(value = "/fileUpload/fileUpload", method = RequestMethod.POST)
+	public String fileUploadPost(MultipartFile fName, String mid) {
+		
+		int res = studyService.fileUpload(fName, mid);
+		
+		//return "study/fileUpload/fileUpload";
+		if(res == 1) return "redirect:/message/fileUploadOk";
+		else return "redirect:/message/fileUploadNo";
+	}
+	@ResponseBody
+	@RequestMapping(value = "/fileUpload/fileDelete", method = RequestMethod.POST)
+	public String fileDeletePost(HttpServletRequest request,
+		 @RequestParam(name="file", defaultValue = "", required =false) String fName) {
+		String realPath = request.getSession().getServletContext().getRealPath("resources/data/study/");
+		
+		int res = 0;
+		File file = new File(realPath + "/" + fName);
+		
+		if(file.exists()) {
+			file.delete();
+			res =1;
+		}		
+		
+		return res + "";
+		
+	}
+	@RequestMapping(value="/fileUpload/fileDownAction", method = RequestMethod.GET)
+	public void fileDownAction(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		String file = request.getParameter("file");
+		String realPath = request.getSession().getServletContext().getRealPath("/resources/data/study");
+	
+		File downFile = new File(realPath + file);
+		
+		String downFileName = new String(file.getBytes("UTF-8"), "8859_1");
+		response.setHeader("Content-Disposition", "attachment:filename=" + downFileName);
+		
+		FileInputStream fis = new FileInputStream(downFile);
+		ServletOutputStream sos = response.getOutputStream();
+		
+		byte[] bytes = new byte[2048];
+		int data = 0;
+		while((data = fis.read(bytes,0, bytes.length)) !=-1) {
+			
+			sos.write(bytes, 0, data);
+		} 
+		sos.flush();
+		fis.close();
+		fis.close();
+	}
+
 }

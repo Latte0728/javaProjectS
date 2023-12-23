@@ -49,6 +49,7 @@
   </c:if>
   <hr/>
   <!-- 실시간 DB 채팅 -->
+  <%-- 
   <div style="width:500px">
     <form name="chatForm">
       <label for="chat"><b>실시간 대화방</b></label>
@@ -64,6 +65,7 @@
   <hr/>
   <div><img src="${ctp}/member/noimage.jpg" width="200px"/></div>
   <hr/>
+   --%>
   <div>
   	<p>현재 <font color="blue"><b>${sNickName}(${strLevel})</b></font>님이 로그인 중이십니다.</p>
   	<p>총 방문횟수 : ${mVo.visitCnt}회</p>

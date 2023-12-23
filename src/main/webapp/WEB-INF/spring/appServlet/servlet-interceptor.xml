@@ -22,6 +22,7 @@
 	    <exclude-mapping path="/member/memberIdCheck"/>
 	    <exclude-mapping path="/member/memberNickCheck"/>
 	    <exclude-mapping path="/member/memberJoin"/>
+	    <exclude-mapping path="/member/memberPasswordSearch"/>
 	    <exclude-mapping path="/guest/**"/>
 	    <exclude-mapping path="/message/**"/>
 	    <beans:ref bean="level3Interceptor" />

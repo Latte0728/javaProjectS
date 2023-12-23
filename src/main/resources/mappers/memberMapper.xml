@@ -9,6 +9,10 @@
   <select id="getMemberNickCheck" resultType="com.spring.javaProjectS.vo.MemberVO">
     select * from member2 where nickName = #{nickName};
   </select>  
+
+  <select id="getMemberEmailSearch" resultType="com.spring.javaProjectS.vo.MemberVO">
+    select * from member2 where email = #{email};
+  </select>  
   
   
   

@@ -33,45 +33,30 @@ public class HomeController {
 		//return "redirect:/user/userList";
 		//return "redirect:/user2/user2List";
 	}
+	
 	@RequestMapping(value="/imageUpload")
-	public void imageUploadGet(MultipartFile upload, 
+	public void imageUploadGet(MultipartFile upload,
 			HttpServletRequest request, HttpServletResponse response) throws IOException {
-			// 넘기는 값이 없을 때는 경로만 지정하고 void타입으로 지정해준다.	
 		response.setCharacterEncoding("utf-8");
 		response.setContentType("text/html; charset=utf-8");
 		
-		// 중복 파일명 처리 
-		String realPath = request.getSession().getServletContext().getRealPath("/resources/data/ckeditor/board/");
+		String realPath = request.getSession().getServletContext().getRealPath("/resources/data/ckeditor/");
 		String oFileName = upload.getOriginalFilename();
-	
-		Date data = new Date();
-		SimpleDateFormat sdf = new SimpleDateFormat("yyMMddHHmmss");
-		oFileName = sdf.format(data) + "" + oFileName;
-	
-		byte[] bytes = upload.getBytes();
-		// 업로드 한번에 못하니 바이트로 나눠서 보냄
-		FileOutputStream fos = new FileOutputStream(new File(realPath+oFileName));
-		// realPath+oFileName : 경로명 + 파일명
-		fos.write(bytes);
-		// /resources/data/ckeditor/board/ <-- 이 경로에 저장됨
 		
-		//byte[] bytes = upload.getBytes();
-		//FileOutputStream fos = new FileOutputStream(new File(realPath+oFileName));
-		//fos.write(bytes);
-		// 파일 저장 완료 
+		Date date = new Date();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyMMddHHmmss");
+		oFileName = sdf.format(date) + "_" + oFileName;
+		
+		byte[] bytes = upload.getBytes();
+		FileOutputStream fos = new FileOutputStream(new File(realPath+oFileName));
+		fos.write(bytes);
 		
 		PrintWriter out = response.getWriter();
-		String fileUrl = request.getContextPath() + "/data/ckeditor/board/" + oFileName;
+		String fileUrl = request.getContextPath() + "/data/ckeditor/" + oFileName;
 		out.println("{\"originalFilename\":\""+oFileName+"\",\"uploaded\":1,\"url\":\""+fileUrl+"\"}");
 		
 		out.flush();
-		// 파일 찌꺼기 보내기(제거)
 		fos.close();
-	}	
+	}
 	
 }
-	
-
-
-
-

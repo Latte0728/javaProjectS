@@ -1,5 +1,6 @@
 package com.spring.javaProjectS.controller;
 
+import java.util.List;
 import java.util.UUID;
 
 import javax.mail.MessagingException;
@@ -165,7 +166,6 @@ public class MemberController {
 		
 		if(res == 1) {
 			session.invalidate();
-			// 세션 차단(연결 끊어버리기)
 			return "1";
 		}
 		else return "0";
@@ -241,7 +241,7 @@ public class MemberController {
 			
 			if(res == "1") return "1";
 		}
-			return "0";
+		return "0";
 	}
 	
 	// 메일 전송하기
@@ -275,21 +275,38 @@ public class MemberController {
 		
 		return "1";
 	}
-	// 메일 인증 시작
 	
-	// 인증키 생성하기
-	/*@ResponseBody
-	@RequestMapping(value = "/memberJoin", method = RequestMethod.POST)
-	public String memberOkPost(HttpSession session ) throws MessagingException {
+	// 회원가입시 이메일로 인증번호 전송하기
+	@ResponseBody
+	@RequestMapping(value = "/memberEmailCheck", method = RequestMethod.POST)
+	public String memberEmailCheckPost(String email, HttpSession session) throws MessagingException {
+		UUID uid = UUID.randomUUID();
+		String emailKey = uid.toString().substring(0,8);
+		session.setAttribute("sEmailKey", emailKey);
 		
-			UUID uid = UUID.randomUUID();
-			String key = uid.toString().substring(0,8);
-			session.setAttribute( , );
-			
-			
-			
-			
-		}*/
-
+		mailSend(email, "이메일 인증키입니다.", "인증키 : "+emailKey);
+		return "1";
 	}
-}	
+	
+	// 이메일 확인하기
+	@ResponseBody
+	@RequestMapping(value = "/memberEmailCheckOk", method = RequestMethod.POST)
+	public String memberEmailCheckOkPost(String checkKey, HttpSession session) throws MessagingException {
+		String sCheckKey = (String) session.getAttribute("sEmailKey");
+		if(checkKey.equals(sCheckKey)) return "1";
+		else return "0";
+	}
+	
+	// 아이디 검색
+	@ResponseBody
+	@RequestMapping(value = "/memberEmailSearch", method = RequestMethod.POST)
+	public String memberEmailSearchPost(String email) {
+		List<MemberVO> vos = memberService.getMemberEmailSearch(email);
+		String res = "";
+		for(MemberVO vo : vos) {
+			res += vo.getMid() + "/";
+		}
+		if(vos.size() == 0) return "0";
+		else return res;
+	}
+}

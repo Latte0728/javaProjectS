@@ -38,27 +38,32 @@
     	}
     	
     	$.ajax({
-    		url  : "memberEmailSearch.mem",
+    		url  : "${ctp}/member/memberEmailSearch",
     		type : "post",
     		data : {email : email},
     		success:function(res) {
-    			let temp = res.split("/");
-    			console.log("temp :", temp);
-    			let str = '검색결과 : <br/><font color=blue><b>';
-    			for(let i=0; i<temp.length; i++) {
-    				let jump = Math.floor((Math.random()*(4-2)) + 2);
-    				let tempMid = temp[i].substring(0,1);
-    				console.log("tempMid",tempMid,", jump",jump);
-    				for(let j=1; j<temp[i].length; j++) {
-    					if(j % jump == 0) tempMid += "*";
-    					else tempMid += temp[i].substring(j,j+1);
-    				}
-	    			str += tempMid;
-	    			
-	    			str += "<br/>";
+    			if(res != 0) {
+	    			let temp = res.split("/");
+	    			console.log("temp :", temp);
+	    			let str = '검색결과 : <br/><font color=blue><b>';
+	    			for(let i=0; i<temp.length; i++) {
+	    				let jump = Math.floor((Math.random()*(4-2)) + 2);
+	    				let tempMid = temp[i].substring(0,1);
+	    				console.log("tempMid",tempMid,", jump",jump);
+	    				for(let j=1; j<temp[i].length; j++) {
+	    					if(j % jump == 0) tempMid += "*";
+	    					else tempMid += temp[i].substring(j,j+1);
+	    				}
+		    			str += tempMid;
+		    			
+		    			str += "<br/>";
+	    			}
+	    			str += '</b></font>';
+	    			midShow.innerHTML = str;
     			}
-    			str += '</b></font>';
-    			midShow.innerHTML = str;
+    			else {
+    				alert("검색한 아이디가 없습니다.")
+    			}
     		},
     		error : function() {
     			alert("전송 오류!");
@@ -92,14 +97,14 @@
     		data : query,
     		success:function(res) {
     			if(res == "1") {
-    				alert("새로운 비밀번호가 회원님 메일로 발송 되었습니다.")
-    			}	
+    				alert("새로운 비밀번호가 회원님 메일로 발송 되었습니다.");
+    			}
     			else {
-    				alert("예상치 못한 오류로 인하여 메일 발송이 취소되었습니다.")
-    			}	
+    				alert("등록하신 정보가 잘못되었습니다. 확인후 다시 전송하세요.");
+    			}
     		},
     		error : function() {
-    			alert("전송오류");
+    			alert("전송오류!");
     		}
     	});
     }
@@ -110,7 +115,7 @@
 <jsp:include page="/WEB-INF/views/include/slide2.jsp" />
 <p><br/></p>
 <div class="container">
-  <form name="loginForm" method="post" >
+  <form name="loginForm" method="post">
   	<table class="table table-bordered m-0">
   	  <tr>
   	    <td colspan="2" class="text-center"><h2>회원 로그인</h2></td>
@@ -187,11 +192,6 @@
 	  	    <td colspan="2">
 	  	      <input type="button" value="새비밀번호발급" onclick="passwordFind()" class="btn btn-info" />
 	  	    </td>
-	  	  </tr>
-	  	</table>
-	  	<table class="table table-borderless">
-	  	  <tr>
-	  	    <td><div id="passwordShow"></div></td>
 	  	  </tr>
 	  	</table>
   	</div>

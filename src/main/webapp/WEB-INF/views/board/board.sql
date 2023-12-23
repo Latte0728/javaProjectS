@@ -25,7 +25,9 @@ select * from board2;
 create table board2Reply (
   idx      	int not null auto_increment,	/* 댓글의 고유번호 */
   boardIdx	int not null,						/* 원본글(부모글)의 고유번호(외래키로 설정) */
-  mid				varchar(30) not null,		/* 댓글 올린이의 아이디 */
+ 	re_step		int not null,						/* 레벨(re_step값)에 따른 들여쓰기(계층번호) : 부모 댓글의 re_step은 1이다, 대댓글의 경우는 부모 re_step +1로 처리. */
+  re_order	int not null,						/* 댓글의 순서를 결정한다, 부모 댓글은 1번, 대댓글의 경우는 부모댓글보다 큰 대댓글에 대하여 're_order + 1'시키고, 자신은 부모댓글의 re_order보다 1개 더 증가시킨다. */
+ 	mid				varchar(30) not null,		/* 댓글 올린이의 아이디 */
   nickName  varchar(30) not null,		/* 댓글 올린이의 닉네임 */
   wDate			datetime default now(),	/* 댓글 올린 날짜 */
   hostIp		varchar(50) not null,		/* 댓글 올린 PC의 고유 IP */
@@ -126,3 +128,10 @@ select timestampdiff(day,wDate,now()) from board2;
 /* 날짜형식(date_format(날짜형식자료, 포멧)) : 년도4자리(%Y), 월(%m), 일(%d), 시간(%H), 분(%i) */
 select wDate, date_format(wDate, '%Y-%m-%d')  from board2;
 select wDate, date_format(wDate, '%Y-%m-%d %H:%i')  from board2;
+
+/* --------------------------- */
+
+select * from board2 order by idx desc limit 0,5;
+select *,datediff(wDate, now()) as date_diff, 
+	timestampdiff(hour,wDate, now()) as hour_diff
+	from board2 order by idx desc limit 0,15;

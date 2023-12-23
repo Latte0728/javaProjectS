@@ -7,8 +7,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>boardInput.jsp</title>
-  <script src = "${ctp}/ckeditor/ckeditor.js"></script>
-  <!-- js ckeditor 경로 지정 -->
+  <script src="${ctp}/ckeditor/ckeditor.js"></script>
   <jsp:include page="/WEB-INF/views/include/bs4.jsp" />
   <style>
     th {
@@ -44,12 +43,13 @@
       <tr>
         <th>글내용</th>
         <td><textarea rows="6" name="content" id="CKEDITOR" class="form-control" required></textarea></td>
-      	<script>
-      	CKEDITOR.replace("content",{
-      		height:480,
-      		filebrowserUploadUrl:"${ctp}/imageUpload"	/* 파일(이미지) 업로드시에 매핑 경로 */
-      	});
-      	</script>
+        <script>
+	        CKEDITOR.replace("content",{
+	        	height:480,
+	        	filebrowserUploadUrl:"${ctp}/imageUpload",		/* 파일(이미지) 업로드시에 매핑경로 */
+	        	uploadUrl : "${ctp}/imageUpload"							/* 여러개의 그림파일을 드래그&드롭해서 올릴수 있다. */
+	        });
+        </script>
       </tr>
       <tr>
         <th>공개여부</th>
@@ -66,10 +66,9 @@
         </td>
       </tr>
     </table>
-    <input type="hidden"  name="hostIp" value="${pageContext.request.remoteAddr}" />
-    <input type="hidden"  name="mid" value="${sMid}" />
-    <!-- BoardController의 BoardVO vo 부분은 name="mid" 을 참고한다.  -->
+    <input type="hidden" name="hostIp" value="${pageContext.request.remoteAddr}" />
     <input type="hidden" name="nickName" value="${sNickName}" />
+    <input type="hidden" name="mid" value="${sMid}" />
   </form>
 </div>
 <p><br/></p>

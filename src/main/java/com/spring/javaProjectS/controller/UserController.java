@@ -15,6 +15,12 @@ import com.spring.javaProjectS.vo.UserVO;
 @RequestMapping("/user")
 public class UserController {
 	
+	
+//	@Autowired @Qualifier("userServiceImpl")
+//	UserService userService;
+//	@Autowired
+//	UserServiceImpl userService;
+	
 	@Autowired
 	UserService userService;
 
@@ -45,5 +51,3 @@ public class UserController {
 		return "study/user/userList";
 	}
 }
-
-	
